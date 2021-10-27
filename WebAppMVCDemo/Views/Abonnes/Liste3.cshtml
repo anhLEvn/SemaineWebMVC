@@ -1,0 +1,18 @@
+﻿@using GridMvc.Html
+@model IEnumerable<WebAppMVCDemo.Models.Abonne>
+
+
+@{
+    ViewBag.Title = "Liste3";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Liste3 Grid MVC</h2>
+
+@Html.Grid(Model).Columns(columns =>
+{
+    columns.Add(p => p.Id).Sortable(true).Filterable(true);
+    columns.Add(p => p.Nom);
+    columns.Add(p => p.Email); 
+}
+).WithPaging(10)

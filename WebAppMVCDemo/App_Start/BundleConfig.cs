@@ -11,6 +11,12 @@ namespace WebAppMVCDemo
             bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
                         "~/Scripts/jquery-{version}.js"));
 
+
+            /* Ajout un nouveau bundle pour GridMVC bundle:  */
+
+            bundles.Add(new ScriptBundle("~/bundles/gridmvc").Include(
+                        "~/Scripts/gridmvc.js"));
+
             bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include(
                         "~/Scripts/jquery.validate*"));
 
@@ -24,6 +30,7 @@ namespace WebAppMVCDemo
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
+                      "~/Content/gridmvc.css",
                       "~/Content/site.css"));
         }
     }

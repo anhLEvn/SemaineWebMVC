@@ -1,0 +1,36 @@
+﻿@model IEnumerable<WebAppMVCDemo.Models.Abonne>
+@{
+    ViewBag.Title = "Liste";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>La Liste des Abonnes</h2>
+<table class="table table-striped">
+    <tr class="info">
+        <th>Numéro: </th>
+        <th>Nom: </th>
+        <th>Prénom: </th>
+    </tr>
+
+    @foreach (var abonne in Model)
+    {
+        if (@abonne.Id < 100)
+        {
+            <tr class="danger">
+                <td>@abonne.Id</td>
+                <td>@abonne.Nom</td>
+                <td>@abonne.Prenom</td>
+            </tr>
+        }
+        else
+        {
+            <tr>
+                <td>@abonne.Id</td>
+                <td>@abonne.Nom</td>
+                <td>@abonne.Prenom</td>
+            </tr>
+        }
+
+   }
+
+</table>

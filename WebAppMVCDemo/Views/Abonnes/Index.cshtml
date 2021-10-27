@@ -1,0 +1,16 @@
+﻿@model WebAppMVCDemo.Models.Abonne
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Index d'Abonne: Afficher un abonné</h2>
+
+<p>
+    Mon abonné: <br />
+    Numéno: @Model.Id<br />
+    Nom:    @Model.Nom<br />
+    Prénom: @Model.Prenom <br />
+
+</p>
+
