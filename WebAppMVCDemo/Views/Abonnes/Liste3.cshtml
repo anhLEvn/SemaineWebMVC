@@ -12,7 +12,55 @@
 @Html.Grid(Model).Columns(columns =>
 {
     columns.Add(p => p.Id).Sortable(true).Filterable(true);
-    columns.Add(p => p.Nom);
-    columns.Add(p => p.Email); 
+    columns.Add(p => p.Nom).Filterable(true);
+    columns.Add(p => p.Email);
+    columns.Add().Sanitized(false).Encoded(false)
+                    .RenderValueAs(p => Html.ActionLink("Modifier", "Modif", new { id = p.Id }));
+    columns.Add().Sanitized(false)
+                   .Encoded(false)
+                   .RenderValueAs(p => "<button class = 'btn btn-danger btn-supprimer-abonne' data-id='" + p.Id + "'>" +
+                   "<span class ='glyphicon glyphicon-trash'/></button>");
 }
 ).WithPaging(10)
+
+@section Scripts
+{
+    <script>
+        $(document).ready(
+            function () {
+                $('.btn-supprimer-abonne').click( // function Jquery : https://learn.jquery.com/using-jquery-core/document-ready/
+                    function (event) {
+
+                        //alert("Bouton cliqué");
+                        var boutonClique = $(event.target).closest('button');
+
+                        var idASupprimer = $(boutonClique).attr('data-id');
+
+                         //alert(idASupprimer);
+                       
+                        // Appel au server on sert de l'Ajax --> envoyer des requetes (url /controller/methode, post, data:) au back
+
+                        $.ajax(
+                            {
+                                url: '@Url.Action("Delete")',
+                                type: 'POST',
+                                data: { id: idASupprimer},
+                                success: function (data) {
+                                    if (data.resultat == "OK") {
+                                        //alert("response OK"); 
+                                        $(boutonClique).closest('tr').fadeOut(500, function () {
+                                            $(this).remove(); 
+                                        })
+                                    }
+                                }
+                            })
+                    });
+
+
+            });
+
+
+    </script>
+
+
+}

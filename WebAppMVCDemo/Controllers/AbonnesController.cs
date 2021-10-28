@@ -124,5 +124,42 @@ namespace WebAppMVCDemo.Controllers
 
             return View("Succes");
         }
+
+        [HttpGet]
+        public ActionResult Modif(int id)
+        {
+            Abonne abonneAModif = listeAbonnes.FirstOrDefault(x => x.Id == id);
+            // TODO: tester s'il existe
+            return View(abonneAModif); 
+        }
+
+
+        [HttpPost]
+        public ActionResult Modif(Abonne abonne)
+        {
+            if (ModelState.IsValid)
+            {
+                Abonne abonneAModif = listeAbonnes.FirstOrDefault(x => x.Id == abonne.Id);
+                abonneAModif.Nom = abonne.Nom;
+                abonneAModif.Email = abonne.Email;
+
+                //return View(abonneAModif); 
+                return RedirectToAction("Liste3"); 
+            }
+            return View(abonne); 
+        }
+
+        public ActionResult Delete(int? id)
+        {
+            if (id.HasValue)
+            {
+                Abonne abonneASupprimer = listeAbonnes.FirstOrDefault(x => x.Id == id);
+
+                listeAbonnes.Remove(abonneASupprimer);
+                return Json(new { resultat = "OK" }, JsonRequestBehavior.AllowGet);
+            }
+            return Json(new { resultat = "NOK" }, JsonRequestBehavior.AllowGet); 
+        }
+        
     }
 }
