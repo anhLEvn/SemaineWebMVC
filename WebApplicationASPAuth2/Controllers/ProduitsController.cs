@@ -13,11 +13,14 @@ using System.Configuration;
 
 namespace WebApplicationASPAuth2.Controllers
 {
+    [Authorize] // la page est soumis à une authentifier
     public class ProduitsController : Controller
     {
+       
         private ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: Produits
+        [AllowAnonymous] // permet l'acces à des internautes (users non autorisé)
         public async Task<ActionResult> Index()
         {
             var produits = db.Produits.Include(p => p.Categorie);
@@ -25,7 +28,8 @@ namespace WebApplicationASPAuth2.Controllers
         }
 
         // GET: Produits/Details/5
-        public async Task<ActionResult> Details(int? id)
+        [Authorize(Roles = "ADMIN, SAISIE")]
+         public async Task<ActionResult> Details(int? id)
         {
             if (id == null)
             {
@@ -40,6 +44,7 @@ namespace WebApplicationASPAuth2.Controllers
         }
 
         // GET: Produits/Create
+        [Authorize(Roles = "SAISIE")]
         public ActionResult Create()
         {
             ViewBag.CategorieId = new SelectList(db.Categories, "Id", "Designation");
@@ -60,11 +65,24 @@ namespace WebApplicationASPAuth2.Controllers
                 // on met la path dans produit.Photo 
                 if(Photo != null && Photo.ContentLength > 0)
                 {
-                    var fileName = Path.GetFileName(Photo.FileName);
-                    string dossierImg = ConfigurationManager.AppSettings["PhotosDossier"];
-                    var path = Path.Combine(Server.MapPath(dossierImg), fileName);
-                    Photo.SaveAs(path);
-                    produit.Photo = fileName; 
+                    //var fileName = Path.GetFileName(Photo.FileName);
+                    //string dossierImg = ConfigurationManager.AppSettings["PhotosDossier"];
+                    //var path = Path.Combine(Server.MapPath(dossierImg), fileName);
+                    //Photo.SaveAs(path);
+                    //produit.Photo = fileName; 
+
+                    if (Photo != null && Photo.ContentLength > 0)
+                    {
+                        var fileName = Path.GetFileName(Photo.FileName);
+                        string dossierImg = ConfigurationManager.AppSettings["photosDossier"];
+
+                        var path = Path.Combine(Server.MapPath(dossierImg), fileName);
+                        Photo.SaveAs(path);
+
+                        produit.Photo = fileName;
+
+                    }
+
                 }
                 db.Produits.Add(produit);
                 await db.SaveChangesAsync();
@@ -109,6 +127,7 @@ namespace WebApplicationASPAuth2.Controllers
         }
 
         // GET: Produits/Delete/5
+        [Authorize(Roles = "ADMIN")]
         public async Task<ActionResult> Delete(int? id)
         {
             if (id == null)
